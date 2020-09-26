@@ -1,0 +1,12 @@
+{
+    "email": "sbluek546@gmail.com",
+    "scheduals": [{
+        "name": "Monday",
+        "days": 0,
+        "periods": [{
+            "name": "class1",
+            "start": [7, 30],
+            "end": [8, 0]
+        }]
+    }]
+}

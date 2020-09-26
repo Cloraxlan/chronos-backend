@@ -3,6 +3,13 @@ import Mail = require("nodemailer/lib/mailer");
 import SMTPTransport = require("nodemailer/lib/smtp-transport");
 //Get .env enviorment variables
 require("dotenv").config();
+//Email option interface
+export interface EmailOption {
+  from: string;
+  to: string;
+  subject: string;
+  text: string;
+}
 //Class to handle sending emails
 export default class EmailClient {
   private _account: TestAccount | null;
