@@ -3,6 +3,7 @@ import { Router } from "express";
 import EmailClient from "../EmailClient";
 import EmailNotifier from "../processes/EmailNotifier";
 import { MongoClient } from "mongodb";
+import { connection } from "../processes/MongoConnection";
 let email = new EmailClient();
 
 // /
@@ -15,10 +16,6 @@ export default Router().get("/", async (req, res) => {
     text: "That was easy!",
   });
   */
-  const uri =
-    "mongodb+srv://backend:hamzaIsAMediocreProgrammer@cluster0-97ewx.gcp.mongodb.net/test?retryWrites=true&w=majority";
-  const client = new MongoClient(uri, { useNewUrlParser: true });
-  const connection = await client.connect();
 
   let test = new EmailNotifier(connection);
   res.send("ok");
