@@ -17,6 +17,6 @@ export default Router().get("/", async (req, res) => {
   });
   */
 
-  let test = new EmailNotifier(connection);
+  //let test = new EmailNotifier(connection);
   res.send("ok");
 });

@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { connection } from "../processes/MongoConnection";
 import { Collection } from "mongodb";
+import SuperSchedual from "../SuperSchedual";
 
 export default Router().get("/", async (req, res) => {
-  let collection: Collection = connection
+  console.log();
+  let collection: Collection = (await connection)
     .db("Chronos")
     .collection("commonScheduals");
-  let hhsDoc: any = collection.find({ name: "hhs" });
+  let hhsDoc: SuperSchedual | null = await collection.findOne({ name: "hhs" });
   res.json(hhsDoc);
 });
