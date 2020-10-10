@@ -1,3 +1,10 @@
+/*
+
+
+   Testing file, most stuff moved to SpreadSheetSchedual
+
+
+*/
 import fs from "fs";
 import { DateTime } from "luxon";
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
