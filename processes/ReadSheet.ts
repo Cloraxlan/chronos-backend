@@ -10,7 +10,7 @@ import { DateTime } from "luxon";
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 const KEY_PATH = "backend/processes/key.json";
 const { JWT } = require("google-auth-library");
-const WEEKS = 19;
+const LAST_ROW = 43;
 const FIRST_ROW = 7;
 const CURRENT_PAGE = "Semester 1";
 const LETTERS = ["G", "H", "I", "J", "K"];
@@ -26,12 +26,12 @@ let getCurrentWeek = (): number => {
   return 53 - firstWeek.weekNumber + weeksFromBeginingOfYear();
 };
 let getRangeString = (
-  weeks: number,
   firstRow: number,
+  lastRow: number,
   currentPage: string
 ): string => {
   let range = "";
-  for (let i: number = 0; i < 5; i++) {
+  for (let i: number = 0; i < LETTERS.length; i++) {
     range +=
       "ranges=" +
       currentPage +
@@ -40,8 +40,7 @@ let getRangeString = (
       firstRow +
       ":" +
       LETTERS[i] +
-      firstRow +
-      weeks +
+      lastRow +
       "&";
   }
   return range;
@@ -58,7 +57,7 @@ async function getCells(): Promise<String[][]> {
     `https://sheets.googleapis.com/v4/spreadsheets/` +
     SPREADSHEET_ID +
     `/values:batchGet?` +
-    getRangeString(WEEKS, FIRST_ROW, CURRENT_PAGE) +
+    getRangeString(FIRST_ROW, LAST_ROW, CURRENT_PAGE) +
     `majorDimension=ROWS&valueRenderOption=FORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING`;
 
   let res = await client.request({ url });
@@ -81,5 +80,5 @@ async function getCells(): Promise<String[][]> {
 }
 
 getCells().then((cells: String[][]) => {
-  console.log(cells[4][getCurrentWeek()]);
+  console.log(cells[4][16]);
 });
