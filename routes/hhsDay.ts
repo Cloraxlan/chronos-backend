@@ -38,6 +38,15 @@ let hhsSS = new SpreadSheetSchedual(
           default:
             return "white";
         }
+      case 0:
+        switch (today.weekday) {
+          case 6:
+            return "saturday";
+          case 7:
+            return "sunday";
+          default:
+            return "noSchool";
+        }
       case 5:
         return "finals";
       default:
