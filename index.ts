@@ -21,27 +21,6 @@ let hhsSS = new SpreadSheetSchedual(
   },
   1000 * 60 * 60 * 24,
   (value: string, today: DateTime) => {
-    //console.log(value);
-    //console.log(today);
-    //!!!!
-    //BECAUSE THERE IS NO WAY TO DETERMINE THE DAY BEFORE A FINAL THE ENTIRE TIME BEFORE A FINAL NEEDS TO BE FILLED OUT
-    //HUGE TODO HAVE ADD PREVIOUS DAY
-    //!!!!
-    if (
-      today.hour < 7 ||
-      (today.hour == 7 && today.minute < 30 && value != "0" && value != "5")
-    ) {
-      if (today.weekday == 2 || today.weekday == 3) {
-        value = (Number(value) - 1).toString();
-      } else {
-        if (value == "2") {
-          value = "3";
-        } else {
-          value = "2";
-        }
-      }
-      today = today.minus({ day: 1 });
-    }
     switch (Number(value)) {
       case 1:
         return "monday";
@@ -51,6 +30,8 @@ let hhsSS = new SpreadSheetSchedual(
             return "tuesday";
           case 4:
             return "thursday";
+          default:
+            return "red";
         }
       case 3:
         switch (today.weekday) {
@@ -58,16 +39,32 @@ let hhsSS = new SpreadSheetSchedual(
             return "wendsday";
           case 5:
             return "friday";
+          default:
+            return "white";
         }
       case 5:
         return "finals";
       default:
         return "No school";
     }
+  },
+  (today: DateTime) => {
+    if (today.weekday < 6) {
+      if (today.weekday == 1) {
+        if (today.hour < 7 || (today.hour == 7 && today.minute < 10)) {
+          return { days: 1 };
+        }
+      } else {
+        if (today.hour < 7 || (today.hour == 7 && today.minute < 30)) {
+          return { days: 1 };
+        }
+      }
+    }
+    return {};
   }
 );
 setTimeout(() => {
-  console.log(hhsSS.tommorowTag);
+  console.log(hhsSS.todayTag);
 }, 5000);
 app.set("views", path.join(__dirname, "views"));
 //Sets html as rendering engine
