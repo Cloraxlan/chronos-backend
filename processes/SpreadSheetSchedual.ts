@@ -38,7 +38,7 @@ export default class SpreadSheetSchedual {
   >;
   private _firstWeek: DateTime;
   private _timeZone: string;
-  private _callback: (value: string) => string;
+  private _callback: (value: string, today: DateTime) => string;
   private _todayTag: string | null = null;
   private _tommorowTag: string | null = null;
 
@@ -47,7 +47,7 @@ export default class SpreadSheetSchedual {
   constructor(
     config: SpreadSheetConfig,
     checkInterval: number,
-    callback: (value: string) => string
+    callback: (value: string, today: DateTime) => string
   ) {
     this._keyPath = config.keyPath;
     this._spreadSheetID = config.spreadSheetID;
@@ -58,15 +58,27 @@ export default class SpreadSheetSchedual {
     this._timeZone = config.timeZone;
     this._callback = callback;
     this.getTodayAndTommorow();
-    setInterval(() => {
+    let midnight: DateTime = this.tommorow();
+    midnight.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+    let miliUntilMidnight: number = midnight
+      .diff(this.today())
+      .as("millisecond");
+    //Sets the first interval at midnight
+    setTimeout(() => {
       this.getTodayAndTommorow();
-    }, checkInterval);
+      setInterval(() => {
+        this.getTodayAndTommorow();
+      }, checkInterval);
+    }, miliUntilMidnight);
   }
   private weeksFromBeginingOfYear(): number {
     return this.today().weekNumber;
   }
   private today(): DateTime {
-    return DateTime.local().setZone(this._timeZone);
+    return DateTime.fromObject({ month: 12, day: 17, year: 2020 }).setZone(
+      this._timeZone
+    );
   }
   private tommorow(): DateTime {
     return this.today().plus({ days: 1 });
@@ -138,12 +150,10 @@ export default class SpreadSheetSchedual {
   }
   //Get cell values based on day of week and week number(both starting at 0) for every cellData object
   //This is done to make only one api request needed
-  private getCell(cellRequests: CellData[]): CellData[] {
-    this.getCells().then((cells) => {
-      cellRequests.map((request, i) => {
-        cellRequests[i].cellValue =
-          cells[request.dayOfWeek][request.weekNumber];
-      });
+  private async getCell(cellRequests: CellData[]): Promise<CellData[]> {
+    let cells = await this.getCells();
+    cellRequests.map((request, i) => {
+      cellRequests[i].cellValue = cells[request.dayOfWeek][request.weekNumber];
     });
     return cellRequests;
   }
@@ -160,13 +170,17 @@ export default class SpreadSheetSchedual {
     };
   }
   //Sets the values for today and tommorow during the interval given
-  private getTodayAndTommorow() {
-    let cells: CellData[] = this.getCell([
+  private async getTodayAndTommorow() {
+    let cells: CellData[] = await this.getCell([
       this.getTodayCellData(),
       this.getTommorowCellData(),
     ]);
-    this._todayTag = this._callback(cells[0].cellValue as string);
-    this._tommorowTag = this._callback(cells[1].cellValue as string);
+
+    this._todayTag = this._callback(cells[0].cellValue as string, this.today());
+    this._tommorowTag = this._callback(
+      cells[1].cellValue as string,
+      this.today()
+    );
   }
   public get todayTag(): string {
     if (this._todayTag) {
