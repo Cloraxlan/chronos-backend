@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { DateTime, DurationObject } from "luxon";
 import fs from "fs";
 const { JWT } = require("google-auth-library");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
@@ -41,13 +41,20 @@ export default class SpreadSheetSchedual {
   private _callback: (value: string, today: DateTime) => string;
   private _todayTag: string | null = null;
   private _tommorowTag: string | null = null;
-
+  private _timeShiftCallback: (today: DateTime) => DurationObject;
+  private _cells: String[][] = [[]];
   //checkInterval is the time in miliseconds
   //callback is the function called with the value found in the spreadsheet and then returns the tag that corresponds with it ex: given 1 and it is tuesdays it responds with tuesday(hhs schedual)
+  //Time shift callback shifts the correct day back based on what time it is
   constructor(
     config: SpreadSheetConfig,
     checkInterval: number,
-    callback: (value: string, today: DateTime) => string
+    callback: (value: string, today: DateTime) => string,
+    timeShiftCallback: (today: DateTime) => DurationObject = (
+      today: DateTime
+    ) => {
+      return {};
+    }
   ) {
     this._keyPath = config.keyPath;
     this._spreadSheetID = config.spreadSheetID;
@@ -57,7 +64,8 @@ export default class SpreadSheetSchedual {
     this._firstWeek = DateTime.fromObject(config.firstWeek);
     this._timeZone = config.timeZone;
     this._callback = callback;
-    this.getTodayAndTommorow();
+    this._timeShiftCallback = timeShiftCallback;
+    this.updateCells();
     let midnight: DateTime = this.tommorow();
     midnight.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
 
@@ -66,17 +74,24 @@ export default class SpreadSheetSchedual {
       .as("millisecond");
     //Sets the first interval at midnight
     setTimeout(() => {
-      this.getTodayAndTommorow();
+      this.updateCells();
       setInterval(() => {
-        this.getTodayAndTommorow();
+        this.updateCells();
       }, checkInterval);
     }, miliUntilMidnight);
+  }
+  private updateCells() {
+    this.getCells().then((cells) => {
+      this._cells = cells;
+    });
   }
   private weeksFromBeginingOfYear(): number {
     return this.today().weekNumber;
   }
   private today(): DateTime {
-    return DateTime.local().setZone(this._timeZone);
+    let today: DateTime = DateTime.local().setZone(this._timeZone);
+    let shift: DurationObject = this._timeShiftCallback(today);
+    return today.minus(shift);
   }
   private tommorow(): DateTime {
     return this.today().plus({ days: 1 });
@@ -148,8 +163,8 @@ export default class SpreadSheetSchedual {
   }
   //Get cell values based on day of week and week number(both starting at 0) for every cellData object
   //This is done to make only one api request needed
-  private async getCell(cellRequests: CellData[]): Promise<CellData[]> {
-    let cells = await this.getCells();
+  private getCell(cellRequests: CellData[]): CellData[] {
+    let cells = this._cells;
     cellRequests.map((request, i) => {
       cellRequests[i].cellValue = cells[request.dayOfWeek][request.weekNumber];
     });
@@ -167,6 +182,9 @@ export default class SpreadSheetSchedual {
       weekNumber: this.getCurrentWeek(),
     };
   }
+  //No longer used
+  //Now all cell values saved and calculated in real time to allow time shifting
+  /*
   //Sets the values for today and tommorow during the interval given
   private async getTodayAndTommorow() {
     let cells: CellData[] = await this.getCell([
@@ -180,19 +198,17 @@ export default class SpreadSheetSchedual {
       this.tommorow()
     );
   }
+  */
   public get todayTag(): string {
-    if (this._todayTag) {
-      this._todayTag;
-    }
-    this.getTodayAndTommorow();
-    return this._todayTag as string;
+    let todayTag: string = "";
+    todayTag = this.getCell([this.getTodayCellData()])[0].cellValue as string;
+    return this._callback(todayTag, this.today()) as string;
   }
   public get tommorowTag(): string {
-    if (this._tommorowTag) {
-      this._tommorowTag;
-    }
-    this.getTodayAndTommorow();
-    return this._tommorowTag as string;
+    let tommorowTag: string = "";
+    tommorowTag = this.getCell([this.getTommorowCellData()])[0]
+      .cellValue as string;
+    return this._callback(tommorowTag, this.tommorow()) as string;
   }
 }
 
