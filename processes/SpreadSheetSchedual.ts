@@ -177,7 +177,7 @@ export default class SpreadSheetSchedual {
     this._todayTag = this._callback(cells[0].cellValue as string, this.today());
     this._tommorowTag = this._callback(
       cells[1].cellValue as string,
-      this.today()
+      this.tommorow()
     );
   }
   public get todayTag(): string {
