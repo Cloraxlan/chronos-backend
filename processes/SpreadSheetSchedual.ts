@@ -76,9 +76,7 @@ export default class SpreadSheetSchedual {
     return this.today().weekNumber;
   }
   private today(): DateTime {
-    return DateTime.fromObject({ month: 12, day: 17, year: 2020 }).setZone(
-      this._timeZone
-    );
+    return DateTime.local().setZone(this._timeZone);
   }
   private tommorow(): DateTime {
     return this.today().plus({ days: 1 });
