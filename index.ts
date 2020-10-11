@@ -23,9 +23,13 @@ let hhsSS = new SpreadSheetSchedual(
   (value: string, today: DateTime) => {
     //console.log(value);
     //console.log(today);
+    //!!!!
+    //BECAUSE THERE IS NO WAY TO DETERMINE THE DAY BEFORE A FINAL THE ENTIRE TIME BEFORE A FINAL NEEDS TO BE FILLED OUT
+    //HUGE TODO HAVE ADD PREVIOUS DAY
+    //!!!!
     if (
       today.hour < 7 ||
-      (today.hour == 7 && today.minute < 30 && value != "0")
+      (today.hour == 7 && today.minute < 30 && value != "0" && value != "5")
     ) {
       if (today.weekday == 2 || today.weekday == 3) {
         value = (Number(value) - 1).toString();
@@ -36,27 +40,26 @@ let hhsSS = new SpreadSheetSchedual(
           value = "2";
         }
       }
-      today.minus({ day: 1 });
+      today = today.minus({ day: 1 });
     }
-    console.log(value);
-    switch (value) {
-      case "1":
+    switch (Number(value)) {
+      case 1:
         return "monday";
-      case "2":
+      case 2:
         switch (today.weekday) {
           case 2:
             return "tuesday";
           case 4:
             return "thursday";
         }
-      case "3":
+      case 3:
         switch (today.weekday) {
           case 3:
             return "wendsday";
           case 5:
             return "friday";
         }
-      case "5":
+      case 5:
         return "finals";
       default:
         return "No school";
