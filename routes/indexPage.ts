@@ -1,10 +1,10 @@
 import Express from "express";
 import { Router } from "express";
-import EmailClient from "../EmailClient";
-import EmailNotifier from "../processes/EmailNotifier";
+//import EmailClient from "../EmailClient";
+//import EmailNotifier from "../processes/EmailNotifier";
 import { MongoClient } from "mongodb";
 import { connection } from "../processes/MongoConnection";
-let email = new EmailClient();
+//let email = new EmailClient();
 
 // /
 export default Router().get("/", async (req, res) => {
