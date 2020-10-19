@@ -10,7 +10,7 @@ let hhsSS = new SpreadSheetSchedual(
     firstRow: 7,
     lastRow: 43,
     firstWeek: { day: 24, month: 8, year: 2020 },
-    keyPath: "backend\\processes\\key.json",
+    keyPath: "key.json",
     sheetName: "Semester 1",
     spreadSheetID: "1ehSc95BR3hHOO4X9-T1TEOgl5NpzG1EcVoQrbLzFKPE",
     timeZone: "America/Chicago",
