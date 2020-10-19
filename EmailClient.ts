@@ -1,3 +1,4 @@
+/*
 import { createTestAccount, TestAccount, createTransport } from "nodemailer";
 import Mail = require("nodemailer/lib/mailer");
 import SMTPTransport = require("nodemailer/lib/smtp-transport");
@@ -45,6 +46,7 @@ export default class EmailClient {
     subject: <Subject Text>,
     text: <Email body>,
   */
+/*
   public send(options: Mail.Options): void {
     this._transport.sendMail(options, (error, info) => {
       if (error) {
@@ -55,3 +57,4 @@ export default class EmailClient {
     });
   }
 }
+*/

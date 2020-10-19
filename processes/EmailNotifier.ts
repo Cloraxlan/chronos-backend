@@ -1,3 +1,4 @@
+/*
 import { MongoClient, Collection, Cursor, BSONType } from "mongodb";
 import Schedual from "../Schedual";
 import Account from "../Account";
@@ -101,3 +102,4 @@ export default class EmailNotifier {
     }
   }
 }
+*/
