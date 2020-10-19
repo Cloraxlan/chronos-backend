@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "backend": "tsnd --respawn ./index.ts",
-    "update:packages": "npm i git+https://github.com/Cloraxlan/chronos-time.git#TimeHandling",
+    "update:packages": "npm i git+https://github.com/Cloraxlan/chronos-time.git",
     "start": "ts-node index.ts",
     "dev": "nodemon -x ts-node index.ts"
   },
@@ -34,6 +34,7 @@
     "@types/luxon": "^1.25.0",
     "@types/mongodb": "^3.5.27",
     "bson": "^4.1.0",
+    "chronos-time": "git+https://github.com/Cloraxlan/chronos-time.git",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
