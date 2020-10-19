@@ -44,6 +44,7 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "path": "^0.12.7",
     "time": "git+https://github.com/Cloraxlan/chronos-time.git",
+    "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   },
   "devDependencies": {
