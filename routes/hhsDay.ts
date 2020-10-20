@@ -54,6 +54,7 @@ let hhsSS = new SpreadSheetSchedual(
     }
   },
   (today: DateTime) => {
+    /*
     if (today.weekday < 6) {
       if (today.weekday == 1) {
         if (today.hour < 7 || (today.hour == 7 && today.minute < 10)) {
@@ -65,6 +66,8 @@ let hhsSS = new SpreadSheetSchedual(
         }
       }
     }
+    return {};
+  */
     return {};
   }
 );
