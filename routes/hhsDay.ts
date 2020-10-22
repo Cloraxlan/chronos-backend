@@ -50,7 +50,7 @@ let hhsSS = new SpreadSheetSchedual(
       case 5:
         return "finals";
       default:
-        return "No school";
+        return "noSchool";
     }
   },
   (today: DateTime) => {
