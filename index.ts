@@ -11,7 +11,7 @@ var cors = require('cors')
 let app = Express();
 
 require("dotenv").config();
-app.use(cors)
+app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 //Sets html as rendering engine
 app.engine("html", require("ejs").renderFile);
