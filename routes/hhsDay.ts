@@ -19,11 +19,11 @@ let hhsSS = new SpreadSheetSchedual(
   (value: string, today: DateTime) => {
     switch (Number(value)) {
       case 1:
-        return "monday";
+        return "wendsday";
       case 2:
         switch (today.weekday) {
-          case 2:
-            return "tuesday";
+          case 1:
+            return "monday";
           case 4:
             return "thursday";
           default:
@@ -31,8 +31,8 @@ let hhsSS = new SpreadSheetSchedual(
         }
       case 3:
         switch (today.weekday) {
-          case 3:
-            return "wendsday";
+          case 2:
+            return "tuesday";
           case 5:
             return "friday";
           default:
