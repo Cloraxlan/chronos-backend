@@ -85,8 +85,8 @@ export default class SpreadSheetSchedual {
       this._cells = cells;
     });
   }
-  private weeksFromBeginingOfYear(): number {
-    return this.today().weekNumber;
+  private weeksFromBeginingOfYear(day: DateTime): number {
+    return day.weekNumber;
   }
   private today(): DateTime {
     let today: DateTime = DateTime.local().setZone(this._timeZone);
@@ -96,11 +96,11 @@ export default class SpreadSheetSchedual {
   private tommorow(): DateTime {
     return this.today().plus({ days: 1 });
   }
-  private getCurrentWeek(): number {
-    if (this._firstWeek.weekNumber <= this.weeksFromBeginingOfYear()) {
-      return this.weeksFromBeginingOfYear() - this._firstWeek.weekNumber;
+  private getCurrentWeek(day: DateTime): number {
+    if (this._firstWeek.weekNumber <= this.weeksFromBeginingOfYear(day)) {
+      return this.weeksFromBeginingOfYear(day) - this._firstWeek.weekNumber;
     }
-    return 53 - this._firstWeek.weekNumber + this.weeksFromBeginingOfYear();
+    return 53 - this._firstWeek.weekNumber + this.weeksFromBeginingOfYear(day);
   }
   private getRangeString(
     firstRow: number,
@@ -173,13 +173,13 @@ export default class SpreadSheetSchedual {
   private getTodayCellData(): CellData {
     return {
       dayOfWeek: this.today().weekday - 1,
-      weekNumber: this.getCurrentWeek(),
+      weekNumber: this.getCurrentWeek(this.today()),
     };
   }
   private getTommorowCellData(): CellData {
     return {
       dayOfWeek: this.tommorow().weekday - 1,
-      weekNumber: this.getCurrentWeek(),
+      weekNumber: this.getCurrentWeek(this.tommorow()),
     };
   }
   //No longer used
