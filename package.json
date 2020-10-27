@@ -8,7 +8,8 @@
     "backend": "tsnd --respawn ./index.ts",
     "update:packages": "npm i git+https://github.com/Cloraxlan/chronos-time.git",
     "start": "ts-node index.ts",
-    "dev": "nodemon -x ts-node index.ts"
+    "dev": "nodemon -x ts-node index.ts",
+    "build": "npx tsc --outDir js --declaration true"
   },
   "repository": {
     "type": "git",
