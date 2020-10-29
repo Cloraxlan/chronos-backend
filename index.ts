@@ -5,12 +5,19 @@ import hhs from "./routes/hhs";
 import SpreadSheetSchedual from "./processes/SpreadSheetSchedual";
 import { DateTime } from "luxon";
 import hhsDay from "./routes/hhsDay";
-var cors = require('cors')
+import authenticate from "./routes/authenticate";
+import bodyParser from "body-parser";
+import getUserInfo from "./routes/getUserInfo";
+import setCustom from "./processes/schedualCustomization/setCustom";
+import getCustom from "./processes/schedualCustomization/getCustom";
+var cors = require("cors");
 
 //Creates express server
 let app = Express();
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 require("dotenv").config();
+
 app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 //Sets html as rendering engine
@@ -19,5 +26,9 @@ app.set("view engine", "html");
 app.use("/", indexPage);
 app.use("/hhs", hhs);
 app.use("/HHSTodayIs", hhsDay);
+app.use("/authenticate", authenticate);
+app.use("/getUserInfo", getUserInfo);
+app.use("/schedualCustomization/setCustom", setCustom);
+app.use("/schedualCustomization/getCustom", getCustom);
 
 app.listen(process.env.PORT);
