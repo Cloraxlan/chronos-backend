@@ -4,6 +4,7 @@ import { SessionId } from "../interfaces/SessionId";
 import { v4 as uuidv4 } from "uuid";
 import { Duration, DateTime } from "luxon";
 import { Account } from "../interfaces/Account";
+import schedualCustomizationSettings from "../interfaces/schedualCustomizationSettings";
 let userCollection: Collection | null = null;
 let initCollection = async (collectionName: string) => {
   userCollection = (await connection).db("Chronos").collection(collectionName);
@@ -15,6 +16,7 @@ const defaultAccount = {
   email: "",
   emailNotifications: false,
   sessionIds: [],
+  schedualCustomizationSettings: [],
 };
 export default class SessionHandler {
   private _email: string | null = null;
@@ -116,6 +118,46 @@ export default class SessionHandler {
     return await (userCollection as Collection).findOne({
       sessionIds: { id: this._sessionId },
     });
+  }
+  public async updateSchedualCustomization(
+    update: schedualCustomizationSettings
+  ) {
+    let schedualCustomizationSettings:
+      | schedualCustomizationSettings[]
+      | null = (
+      await (userCollection as Collection).findOne({
+        email: this._email,
+      })
+    ).schedualCustomizationSettings;
+    if (schedualCustomizationSettings) {
+      let updated = false;
+      for (let i = 0; i < schedualCustomizationSettings.length; i++) {
+        if (schedualCustomizationSettings[i].baseName == update.baseName) {
+          schedualCustomizationSettings[i] = update;
+          updated = true;
+        }
+      }
+      if (!updated) {
+        schedualCustomizationSettings.push(update);
+      }
+      await (userCollection as Collection).findOneAndUpdate(
+        {
+          email: this._email,
+        },
+        {
+          $set: {
+            schedualCustomizationSettings: schedualCustomizationSettings,
+          },
+        }
+      );
+    }
+  }
+  public async getCustom(): Promise<schedualCustomizationSettings | null> {
+    return (
+      await (userCollection as Collection).findOne({
+        email: this._email,
+      })
+    ).schedualCustomizationSettings;
   }
   public async verifyEmail(): Promise<boolean> {
     try {

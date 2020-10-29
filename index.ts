@@ -8,6 +8,8 @@ import hhsDay from "./routes/hhsDay";
 import authenticate from "./routes/authenticate";
 import bodyParser from "body-parser";
 import getUserInfo from "./routes/getUserInfo";
+import setCustom from "./processes/schedualCustomization/setCustom";
+import getCustom from "./processes/schedualCustomization/getCustom";
 var cors = require("cors");
 
 //Creates express server
@@ -26,5 +28,7 @@ app.use("/hhs", hhs);
 app.use("/HHSTodayIs", hhsDay);
 app.use("/authenticate", authenticate);
 app.use("/getUserInfo", getUserInfo);
+app.use("/schedualCustomization/setCustom", setCustom);
+app.use("/schedualCustomization/getCustom", getCustom);
 
 app.listen(process.env.PORT);
