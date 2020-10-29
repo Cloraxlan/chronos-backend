@@ -1,4 +1,7 @@
-import Schedual from "./Schedual";
+import { SessionId } from "./SessionId";
+import schedualCustomizationSettings from "./schedualCustomizationSettings";
+
+/*import Schedual from "./Schedual";
 
 export default class Account {
   private _email: string;
@@ -20,4 +23,11 @@ export default class Account {
   public schedual(day: number): Schedual {
     return this._scheduals[day];
   }
+}
+*/
+export interface Account {
+  email: string;
+  emailNotifications: boolean;
+  sessionIds: SessionId[];
+  commonSchedualCustomizationSettings: schedualCustomizationSettings;
 }
