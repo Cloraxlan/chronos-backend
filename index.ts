@@ -10,6 +10,8 @@ import bodyParser from "body-parser";
 import getUserInfo from "./routes/getUserInfo";
 import setCustom from "./processes/schedualCustomization/setCustom";
 import getCustom from "./processes/schedualCustomization/getCustom";
+import getTime from "./processes/timeCustomization/getTime";
+import setTime from "./processes/timeCustomization/setTime";
 var cors = require("cors");
 
 //Creates express server
@@ -30,5 +32,6 @@ app.use("/authenticate", authenticate);
 app.use("/getUserInfo", getUserInfo);
 app.use("/schedualCustomization/setCustom", setCustom);
 app.use("/schedualCustomization/getCustom", getCustom);
-
+app.use("/customTime/setScheduals", setTime);
+app.use("/customTime/getScheduals", getTime);
 app.listen(process.env.PORT);

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Duration, DateTime } from "luxon";
 import { Account } from "../interfaces/Account";
 import schedualCustomizationSettings from "../interfaces/schedualCustomizationSettings";
+import schedualCustomizationTimes from "../interfaces/schedualCustomizationTimes";
 let userCollection: Collection | null = null;
 let initCollection = async (collectionName: string) => {
   userCollection = (await connection).db("Chronos").collection(collectionName);
@@ -17,6 +18,7 @@ const defaultAccount = {
   emailNotifications: false,
   sessionIds: [],
   schedualCustomizationSettings: [],
+  customTimes: [],
 };
 export default class SessionHandler {
   private _email: string | null = null;
@@ -152,12 +154,31 @@ export default class SessionHandler {
       );
     }
   }
+  public async updateSchedualTime(update: schedualCustomizationTimes) {
+    await (userCollection as Collection).findOneAndUpdate(
+      {
+        email: this._email,
+      },
+      {
+        $set: {
+          customTimes: update,
+        },
+      }
+    );
+  }
   public async getCustom(): Promise<schedualCustomizationSettings | null> {
     return (
       await (userCollection as Collection).findOne({
         email: this._email,
       })
     ).schedualCustomizationSettings;
+  }
+  public async getCustomTime(): Promise<schedualCustomizationTimes | null> {
+    return (
+      await (userCollection as Collection).findOne({
+        email: this._email,
+      })
+    ).customTimes;
   }
   public async verifyEmail(): Promise<boolean> {
     try {

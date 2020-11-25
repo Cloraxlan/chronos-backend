@@ -1,5 +1,6 @@
 import { SessionId } from "./SessionId";
 import schedualCustomizationSettings from "./schedualCustomizationSettings";
+import schedualCustomizationTimes from "./schedualCustomizationTimes";
 
 /*import Schedual from "./Schedual";
 
@@ -30,4 +31,5 @@ export interface Account {
   emailNotifications: boolean;
   sessionIds: SessionId[];
   commonSchedualCustomizationSettings: schedualCustomizationSettings;
+  customTimes: schedualCustomizationTimes;
 }
