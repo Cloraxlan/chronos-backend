@@ -19,7 +19,9 @@ let app = Express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 require("dotenv").config();
+const nocache = require("nocache");
 
+app.use(nocache());
 app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 //Sets html as rendering engine
