@@ -7,11 +7,11 @@ import SpreadSheetSchedual from "../processes/SpreadSheetSchedual";
 let hhsSS = new SpreadSheetSchedual(
   {
     columns: ["G", "H", "I", "J", "K", "L", "M"],
-    firstRow: 7,
-    lastRow: 43,
-    firstWeek: { day: 24, month: 8, year: 2020 },
+    firstRow: 5,
+    lastRow: 47,
+    firstWeek: { day: 4, month: 1, year: 2021 },
     keyPath: "key.json",
-    sheetName: "Semester 1",
+    sheetName: "Semester 2",
     spreadSheetID: "1ehSc95BR3hHOO4X9-T1TEOgl5NpzG1EcVoQrbLzFKPE",
     timeZone: "America/Chicago",
   },
