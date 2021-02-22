@@ -19,6 +19,7 @@ const defaultAccount = {
   sessionIds: [],
   schedualCustomizationSettings: [],
   customTimes: [],
+  savedSchedual: "",
 };
 export default class SessionHandler {
   private _email: string | null = null;
@@ -218,5 +219,24 @@ export default class SessionHandler {
     let newAccount = defaultAccount;
     newAccount.email = this._email as string;
     await (userCollection as Collection).insertOne(newAccount);
+  }
+  public async saveSchedual(schedualArrString: string) {
+    await (userCollection as Collection).findOneAndUpdate(
+      {
+        email: this._email,
+      },
+      {
+        $set: {
+          savedSchedual: schedualArrString,
+        },
+      }
+    );
+  }
+  public async getSavedSchedual(): Promise<string> {
+    return (
+      await (userCollection as Collection).findOne({
+        email: this._email,
+      })
+    ).savedSchedual;
   }
 }
