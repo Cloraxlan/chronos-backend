@@ -27,6 +27,7 @@ const defaultAccount = {
   schedualCustomizationSettings: [],
   customTimes: [],
   savedSchedual: "",
+  allData: "",
 };
 export default class SessionHandler {
   private _email: string | null = null;
@@ -273,5 +274,24 @@ export default class SessionHandler {
         id: id,
       })
     ).schedual;
+  }
+  public async getAllData(): Promise<any> {
+    return (
+      await (userCollection as Collection).findOne({
+        email: this._email,
+      })
+    ).allData;
+  }
+  public async setAllData(allData: any) {
+    await (userCollection as Collection).findOneAndUpdate(
+      {
+        email: this._email,
+      },
+      {
+        $set: {
+          allData: allData,
+        },
+      }
+    );
   }
 }
