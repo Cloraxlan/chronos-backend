@@ -7,10 +7,17 @@ import { Account } from "../interfaces/Account";
 import schedualCustomizationSettings from "../interfaces/schedualCustomizationSettings";
 import schedualCustomizationTimes from "../interfaces/schedualCustomizationTimes";
 let userCollection: Collection | null = null;
-let initCollection = async (collectionName: string) => {
-  userCollection = (await connection).db("Chronos").collection(collectionName);
+let sharedScheduals: Collection | null = null;
+
+let initCollection = async (collectionNames: string[]) => {
+  userCollection = (await connection)
+    .db("Chronos")
+    .collection(collectionNames[0]);
+  sharedScheduals = (await connection)
+    .db("Chronos")
+    .collection(collectionNames[1]);
 };
-initCollection("ChronosUsers");
+initCollection(["ChronosUsers", "sharedScheduals"]);
 //Days token is alive
 const tokenLife = 14;
 const defaultAccount = {
@@ -19,6 +26,8 @@ const defaultAccount = {
   sessionIds: [],
   schedualCustomizationSettings: [],
   customTimes: [],
+  savedSchedual: "",
+  allData: "",
 };
 export default class SessionHandler {
   private _email: string | null = null;
@@ -218,5 +227,71 @@ export default class SessionHandler {
     let newAccount = defaultAccount;
     newAccount.email = this._email as string;
     await (userCollection as Collection).insertOne(newAccount);
+  }
+  public async saveSchedual(schedualArrString: string) {
+    await (userCollection as Collection).findOneAndUpdate(
+      {
+        email: this._email,
+      },
+      {
+        $set: {
+          savedSchedual: schedualArrString,
+        },
+      }
+    );
+  }
+  public async getSavedSchedual(): Promise<string> {
+    return (
+      await (userCollection as Collection).findOne({
+        email: this._email,
+      })
+    ).savedSchedual;
+  }
+  public async createShare(schedual: string): Promise<string> {
+    let id = uuidv4();
+    await sharedScheduals?.insert({
+      id: id,
+      owner: this._email,
+      schedual: schedual,
+    });
+    return id;
+  }
+  public async validateSharingOwner(id: string): Promise<Boolean> {
+    if (
+      (
+        await (userCollection as Collection).findOne({
+          id: id,
+        })
+      ).owner == this._email
+    ) {
+      return true;
+    }
+    return false;
+  }
+  public async getSharedSchedual(id: string): Promise<any> {
+    return (
+      await (userCollection as Collection).findOne({
+        id: id,
+      })
+    ).schedual;
+  }
+  public async getAllData(): Promise<any> {
+    return (
+      await (userCollection as Collection).findOne({
+        email: this._email,
+      })
+    ).allData;
+  }
+  public async setAllData(allData: any) {
+    await (userCollection as Collection).findOneAndUpdate(
+      {
+        email: this._email,
+      },
+      {
+        $set: {
+          allData: allData,
+        },
+      }
+    );
   }
 }

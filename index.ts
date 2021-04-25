@@ -12,6 +12,12 @@ import setCustom from "./processes/schedualCustomization/setCustom";
 import getCustom from "./processes/schedualCustomization/getCustom";
 import getTime from "./processes/timeCustomization/getTime";
 import setTime from "./processes/timeCustomization/setTime";
+import getSavedSchedual from "./processes/schedualCustomization/getSavedSchedual";
+import setSavedSchedual from "./processes/schedualCustomization/setSavedSchedual";
+import createShare from "./processes/sharing/createShare";
+import getShare from "./processes/sharing/getShare";
+import saveAllData from "./processes/saveData/saveAllData";
+import getAllData from "./processes/saveData/getAllData";
 var cors = require("cors");
 
 //Creates express server
@@ -36,4 +42,10 @@ app.use("/schedualCustomization/setCustom", setCustom);
 app.use("/schedualCustomization/getCustom", getCustom);
 app.use("/customTime/setScheduals", setTime);
 app.use("/customTime/getScheduals", getTime);
+app.use("/save/getScheduals", getSavedSchedual);
+app.use("/save/setScheduals", setSavedSchedual);
+app.use("/share/createShare", createShare);
+app.use("/share/getShare", getShare);
+app.use("/saveData", saveAllData);
+app.use("/getData", getAllData);
 app.listen(process.env.PORT);
