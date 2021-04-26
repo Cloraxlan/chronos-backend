@@ -18,6 +18,8 @@ import createShare from "./processes/sharing/createShare";
 import getShare from "./processes/sharing/getShare";
 import saveAllData from "./processes/saveData/saveAllData";
 import getAllData from "./processes/saveData/getAllData";
+import updateHHS from "./processes/admin/updateHHS";
+import restart from "./processes/admin/restart";
 var cors = require("cors");
 
 //Creates express server
@@ -48,4 +50,7 @@ app.use("/share/createShare", createShare);
 app.use("/share/getShare", getShare);
 app.use("/saveData", saveAllData);
 app.use("/getData", getAllData);
+app.use("/admin/updatehhs", updateHHS);
+app.use("/admin/restart", restart);
+
 app.listen(process.env.PORT);
