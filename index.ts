@@ -35,7 +35,7 @@ app.set("views", path.join(__dirname, "views"));
 //Sets html as rendering engine
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
-app.use("/", indexPage);
+app.use(Express.static("public"));
 app.use("/hhs", hhs);
 app.use("/HHSTodayIs", hhsDay);
 app.use("/authenticate", authenticate);
