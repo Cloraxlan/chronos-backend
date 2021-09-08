@@ -22,21 +22,21 @@ let hhsSS = new SpreadSheetSchedual(
         return "wendsday";
       case 2:
         switch (today.weekday) {
-          case 1:
+          /*case 1:
             return "monday";
           case 4:
-            return "thursday";
+            return "thursday";*/
           default:
-            return "red";
+            return "weekday";
         }
       case 3:
         switch (today.weekday) {
-          case 2:
+          /*case 2:
             return "tuesday";
           case 5:
-            return "friday";
+            return "friday";*/
           default:
-            return "white";
+            return "early";
         }
       case 0:
         switch (today.weekday) {
